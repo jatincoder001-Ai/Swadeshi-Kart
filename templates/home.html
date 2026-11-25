@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block title %}SwadeshiKart • Home | Compare Blinkit, Zepto &amp; Instamart{% endblock %}
+
+{% block splash %}
+<div id="splash-screen" class="splash-screen">
+  <div class="splash-content">
+    <div class="splash-logo">
+      <span class="splash-lightning">⚡</span>
+      <span class="splash-brand">swadeshi<span class="splash-accent">kart</span></span>
+    </div>
+    <p class="splash-tagline">Compare Blinkit • Zepto • Instamart</p>
+  </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<!-- Home Hero Section -->
+<section class="home-hero animate-hero">
+  <div class="hero-pill-badge">⚡ 3-App Price Comparison + Smart Cart Optimizer</div>
+  <h1 class="hero-title">Find the cheapest app for every grocery item</h1>
+  <p class="hero-subtitle">
+    Instantly compare prices across <strong>Blinkit</strong>, <strong>Zepto</strong>, and <strong>Swiggy Instamart</strong>.
+    Add multiple items to your Smart Cart to see which platform saves you the most!
+  </p>
+
+  <!-- Quick Search Redirecting to /compare -->
+  <form action="{{ url_for('compare_page') }}" method="get" class="home-search-form">
+    <div class="search-input-box">
+      <span class="search-icon" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </span>
+      <input
+        name="q"
+        type="text"
+        placeholder="Search Oreo, Surf Excel, Himalayan Water, Parle-G..."
+        autocomplete="off"
+        aria-label="Search product to compare prices"
+      >
+      <button type="submit" class="home-search-btn">Compare Prices →</button>
+    </div>
+  </form>
+
+  <!-- Quick Category Links -->
+  <div class="category-pills-bar">
+    <span class="pills-label">Explore Categories:</span>
+    <div class="pills-scroll">
+      {% for cat in categories %}
+      <a href="{{ url_for('compare_page', category=cat.id) }}" class="cat-pill">
+        <span class="cat-pill-icon">{{ cat.icon }}</span>
+        <span class="cat-pill-name">{{ cat.name }}</span>
+        <span class="cat-pill-count">{{ cat.total_count }}</span>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- 3 Core Features Grid -->
+<section class="features-grid-section">
+  <div class="section-heading-row">
+    <h2 class="section-heading">Everything in one place</h2>
+    <p class="section-sub">Choose a tool to start saving on your daily groceries</p>
+  </div>
+
+  <div class="features-grid features-grid-2">
+    <a href="{{ url_for('compare_page') }}" class="feature-card feature-compare">
+      <div class="feature-icon-wrap">⚡</div>
+      <h3>Compare Prices &amp; Indian Alternatives</h3>
+      <p>Search any grocery item to see <strong>Foreign Brands (Red)</strong> vs <strong>Indian Alternatives (Green)</strong> side-by-side, with live <strong>Blinkit, Zepto &amp; Instamart</strong> prices on every card.</p>
+      <span class="feature-cta">Compare &amp; Shop →</span>
+    </a>
+
+    <a href="{{ url_for('cart_page') }}" class="feature-card feature-cart">
+      <div class="feature-icon-wrap">🛒</div>
+      <h3>Smart Cart Optimizer</h3>
+      <p>Buying multiple items? Add them to your cart and get a final verdict: the cheapest single app vs. a Split Cart strategy across Blinkit, Zepto &amp; Instamart.</p>
+      <span class="feature-cta">Open Smart Cart →</span>
+    </a>
+  </div>
+</section>
+
+<!-- Featured Best Deals -->
+<section class="featured-deals-section">
+  <div class="section-heading-row">
+    <div>
+      <h2 class="section-heading">🔥 Biggest Price Differences Today</h2>
+      <p class="section-sub">Products where picking the right app saves you the most</p>
+    </div>
+    <a href="{{ url_for('compare_page') }}" class="view-all-link">View all {{ total_products }} products →</a>
+  </div>
+
+  <div class="deals-grid">
+    {% for item in featured_deals %}
+    <article class="deal-card">
+      <div class="deal-card-top">
+        <div class="deal-thumb-wrap">
+          <img
+            src="{{ url_for('static', filename='images/' + item.id + '.svg') }}"
+            alt="{{ item.name }}"
+            onerror="this.src='{{ url_for('static', filename='images/1.svg') }}'"
+          >
+        </div>
+        <div class="deal-meta">
+          <span class="deal-brand">{{ item.brand }} • {{ item.quantity }}</span>
+          <h3 class="deal-name">{{ item.name }}</h3>
+          <span class="deal-savings-pill">Save ₹{{ item.savings|int }} ({{ item.savings_pct }}%) on {{ platforms[item.cheapest_platform].short }}</span>
+        </div>
+      </div>
+
+      <div class="mini-platform-row">
+        {% for pid in ['blinkit', 'zepto', 'instamart'] %}
+        <div class="mini-plat-chip {% if item.cheapest_platform == pid %}is-cheapest{% endif %}">
+          <span class="mini-plat-name">{{ platforms[pid].icon }} {{ platforms[pid].short }}</span>
+          <span class="mini-plat-price">₹{{ item.prices[pid]|int }}</span>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div class="deal-card-actions">
+        <button
+          type="button"
+          class="btn-add-cart"
+          data-add-cart="{{ item.id }}"
+          data-product-name="{{ item.name }}"
+        >
+          🛒 Add to Cart
+        </button>
+        <a href="{{ url_for('compare_page', q=item.name) }}" class="btn-outline-sm">Details</a>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  (function () {
+    const splash = document.getElementById("splash-screen");
+    if (!splash) return;
+    if (sessionStorage.getItem("sk_splash_seen")) {
+      splash.classList.add("hidden");
+      return;
+    }
+    sessionStorage.setItem("sk_splash_seen", "1");
+    splash.addEventListener("animationend", () => splash.classList.add("hidden"));
+  })();
+</script>
+{% endblock %}

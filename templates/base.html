@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}SwadeshiKart • Compare Blinkit, Zepto &amp; Instamart{% endblock %}</title>
+  <meta name="description" content="Compare grocery prices across Blinkit, Zepto, and Swiggy Instamart. Build a multi-product cart to find the cheapest platform, and discover Indian alternatives.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  {% block head_extra %}{% endblock %}
+</head>
+<body>
+  {% block splash %}{% endblock %}
+
+  <!-- Shared Navigation Header -->
+  <header class="app-header animate-header">
+    <div class="header-container">
+      <a href="{{ url_for('home') }}" class="brand-logo" aria-label="SwadeshiKart Home">
+        <span class="logo-lightning">⚡</span>
+        <span>swadeshi<span class="logo-accent">kart</span></span>
+      </a>
+
+      <nav class="main-nav" aria-label="Primary Navigation">
+        <a href="{{ url_for('home') }}" class="nav-link {% if active_page == 'home' %}active{% endif %}">
+          <span>🏠</span><span>Home</span>
+        </a>
+        <a href="{{ url_for('compare_page') }}" class="nav-link {% if active_page == 'compare' %}active{% endif %}">
+          <span>⚡</span><span>Compare &amp; Swadeshi</span>
+        </a>
+        <a href="{{ url_for('cart_page') }}" class="nav-link nav-cart-link {% if active_page == 'cart' %}active{% endif %}">
+          <span>🛒</span><span>Smart Cart</span>
+          <span id="nav-cart-badge" class="nav-cart-badge" hidden>0</span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-container">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="app-footer">
+    <p class="footer-title">⚡ SwadeshiKart • Smart Quick-Commerce Price Comparison</p>
+    <p class="footer-sub">Compare Blinkit, Zepto &amp; Swiggy Instamart • Smart Cart Optimizer • Vocal for Local 🇮🇳</p>
+  </footer>
+
+  <!-- Toast notification for cart actions -->
+  <div id="cart-toast" class="cart-toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="{{ url_for('static', filename='cart.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

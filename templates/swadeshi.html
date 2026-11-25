@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}Swadeshi Alternatives • Foreign vs Indian Brands | SwadeshiKart{% endblock %}
+
+{% block content %}
+<!-- Search Section -->
+<section class="hero-section animate-hero">
+  <div class="hero-pill-badge">🇮🇳 Vocal for Local • Compare &amp; Save</div>
+  <h1 class="hero-title">Find an Indian alternative for everyday groceries</h1>
+  <p class="hero-subtitle">Compare expensive foreign products with high-value Indian alternatives side-by-side.</p>
+
+  <!-- Search Box -->
+  <div class="search-wrapper">
+    <div class="search-input-box">
+      <span class="search-icon" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </span>
+      <input 
+        id="search" 
+        type="text" 
+        placeholder="Search water, chips, biscuits, cleaning, shampoo..." 
+        autocomplete="off"
+        aria-label="Search grocery category"
+        role="combobox"
+        aria-autocomplete="list"
+        aria-expanded="false"
+      >
+      <button id="clear-search" class="clear-btn" type="button" aria-label="Clear search" hidden>×</button>
+    </div>
+    <ul id="suggestions" class="suggestions-list" role="listbox" hidden></ul>
+  </div>
+
+  <!-- Quick Category Pills -->
+  <div class="category-pills-bar">
+    <span class="pills-label">Quick Pick:</span>
+    <div class="pills-scroll" id="category-pills">
+      {% for cat in categories %}
+      <button class="cat-pill" type="button" data-cat-id="{{ cat.id }}" title="{{ cat.tagline }}">
+        <span class="cat-pill-icon">{{ cat.icon }}</span>
+        <span class="cat-pill-name">{{ cat.name }}</span>
+        <span class="cat-pill-count">{{ cat.total_count }}</span>
+      </button>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Alert / Message -->
+<div id="message" class="message-box" hidden role="status"></div>
+
+<!-- Category & Savings Banner -->
+<section id="category-banner" class="category-banner" hidden>
+  <div class="banner-content">
+    <div class="banner-title-group">
+      <span id="banner-icon" class="banner-cat-icon">🛒</span>
+      <div>
+        <h2 id="banner-title" class="banner-cat-name">Category</h2>
+        <p id="banner-tagline" class="banner-cat-tagline">Comparing foreign brands with Indian alternatives</p>
+      </div>
+    </div>
+    <div id="savings-badge" class="savings-badge">
+      <span>💰</span>
+      <span id="savings-text">Switch to Indian brands &amp; save up to <strong>80%</strong></span>
+    </div>
+  </div>
+</section>
+
+<!-- Mobile Comparison View Switcher -->
+<div id="mobile-view-tabs" class="mobile-tabs-bar" hidden>
+  <button class="mobile-tab-btn active" data-view="both" type="button">⚡ Both</button>
+  <button class="mobile-tab-btn" data-view="indian" type="button">🇮🇳 Indian <span id="m-tab-indian-count" class="m-count-pill"></span></button>
+  <button class="mobile-tab-btn" data-view="foreign" type="button">⚠️ Foreign <span id="m-tab-foreign-count" class="m-count-pill"></span></button>
+</div>
+
+<!-- Side-by-Side Comparison -->
+<section id="results" class="comparison-grid" hidden>
+  <div class="comparison-col col-foreign">
+    <div class="col-header">
+      <div class="col-title-wrap">
+        <span class="col-badge foreign-badge">⚠️ Expensive / Imported</span>
+        <h3 class="col-heading">Foreign Brands</h3>
+      </div>
+      <span id="foreign-count" class="count-tag foreign-count-tag">5 Products</span>
+    </div>
+    <div id="foreign-list" class="cards-list"></div>
+  </div>
+
+  <div class="comparison-col col-indian">
+    <div class="col-header">
+      <div class="col-title-wrap">
+        <span class="col-badge indian-badge">✅ 100% Swadeshi • High Value</span>
+        <h3 class="col-heading">Indian Alternatives</h3>
+      </div>
+      <span id="indian-count" class="count-tag indian-count-tag">5 Alternatives</span>
+    </div>
+    <div id="indian-list" class="cards-list"></div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const SUGGESTIONS = {{ suggestions | tojson }};
+  const CATEGORIES = {{ categories | tojson }};
+</script>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+{% endblock %}

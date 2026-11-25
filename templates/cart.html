@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Smart Cart Optimizer • SwadeshiKart{% endblock %}
+
+{% block content %}
+<section class="hero-section cart-hero">
+  <div class="hero-pill-badge">🛒 Multi-Product Cart Comparison</div>
+  <h1 class="hero-title">Smart Cart Optimizer</h1>
+  <p class="hero-subtitle">
+    Compare your entire grocery basket across <strong>Blinkit</strong>, <strong>Zepto</strong>, and <strong>Swiggy Instamart</strong> —
+    including delivery fees and a <strong>Split Cart</strong> option.
+  </p>
+</section>
+
+<!-- Empty Cart State -->
+<section id="cart-empty-state" class="cart-empty-card" hidden>
+  <div class="empty-cart-icon">🛒</div>
+  <h2>Your Smart Cart is empty</h2>
+  <p>Add products from the Price Comparison page or quick-add popular items below to see which platform wins.</p>
+  <div class="empty-cart-actions">
+    <a href="{{ url_for('compare_page') }}" class="home-search-btn">Browse All Products →</a>
+  </div>
+
+  <div class="quick-add-strip">
+    <h3>⚡ Quick-Add Popular Items</h3>
+    <div class="quick-add-grid">
+      {% for item in quick_add %}
+      <div class="quick-add-chip">
+        <div>
+          <strong>{{ item.name }}</strong>
+          <span>{{ item.quantity }} • From ₹{{ item.cheapest_price|int }}</span>
+        </div>
+        <button type="button" class="btn-add-cart btn-sm" data-add-cart="{{ item.id }}" data-product-name="{{ item.name }}">+ Add</button>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Active Cart Dashboard -->
+<section id="cart-dashboard" hidden>
+  <!-- Final Verdict Banner -->
+  <div id="verdict-banner" class="verdict-banner">
+    <div class="verdict-main">
+      <span class="verdict-tag">🏆 FINAL VERDICT</span>
+      <h2 id="verdict-title">Calculating best platform...</h2>
+      <p id="verdict-subtitle"></p>
+    </div>
+    <div class="verdict-actions">
+      <button id="clear-cart-btn" type="button" class="btn-danger-outline">🗑️ Clear Cart</button>
+      <a href="{{ url_for('compare_page') }}" class="btn-outline-sm">+ Add More Items</a>
+    </div>
+  </div>
+
+  <!-- 3-Platform Total Cards -->
+  <div id="platform-totals-grid" class="platform-totals-grid"></div>
+
+  <!-- Split Cart Recommendation -->
+  <div id="split-cart-section" class="split-cart-section"></div>
+
+  <!-- Item-by-Item Breakdown Table -->
+  <div class="cart-items-panel">
+    <div class="panel-header-row">
+      <h3>📋 Item-by-Item Price Breakdown</h3>
+      <span id="cart-item-summary" class="count-tag">0 items</span>
+    </div>
+    <div class="cart-table-wrap">
+      <table class="cart-table">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Qty</th>
+            <th>⚡ Blinkit</th>
+            <th>🟣 Zepto</th>
+            <th>🟠 Instamart</th>
+            <th>Best For Item</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="cart-table-body"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const PLATFORMS_META = {{ platforms | tojson }};
+</script>
+<script src="{{ url_for('static', filename='cart_page.js') }}"></script>
+{% endblock %}
