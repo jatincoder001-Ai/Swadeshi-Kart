@@ -99,9 +99,9 @@
       <div class="deal-card-top">
         <div class="deal-thumb-wrap">
           <img
-            src="{{ url_for('static', filename='images/' + item.id + '.svg') }}"
+            src="{{ url_for('static', filename='images/' + item.id + '.jpg') }}"
             alt="{{ item.name }}"
-            onerror="this.src='{{ url_for('static', filename='images/1.svg') }}'"
+            onerror="if(this.dataset.fb==='svg'){this.onerror=null;this.style.display='none';}else{this.dataset.fb='svg';this.src='{{ url_for('static', filename='images/' + item.id + '.svg') }}';}"
           >
         </div>
         <div class="deal-meta">

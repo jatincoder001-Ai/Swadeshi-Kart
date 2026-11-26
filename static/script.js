@@ -306,7 +306,7 @@ function createProductCard(p, type, stats) {
     img.onerror = showFallback;
   } else {
     const baseName = p.image ? p.image.replace(/\.[^/.]+$/, "") : (p.id ? String(p.id) : "placeholder");
-    const formats = ["png", "jpg", "svg"];
+    const formats = ["jpg", "png", "svg"];
     let formatIndex = 0;
 
     img.src = `/static/images/${baseName}.${formats[formatIndex]}`;

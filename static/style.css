@@ -294,8 +294,10 @@ body {
   margin-right: 10px;
 }
 
-#search {
+#search,
+.search-input-box input {
   flex: 1;
+  min-width: 0;
   border: none;
   outline: none;
   font-family: inherit;
@@ -306,7 +308,8 @@ body {
   background: transparent;
 }
 
-#search::placeholder {
+#search::placeholder,
+.search-input-box input::placeholder {
   color: var(--ink-light);
   font-weight: 400;
 }
@@ -1269,7 +1272,28 @@ body {
 }
 
 .home-search-form .search-input-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   padding-right: 6px;
+}
+
+.home-search-form .search-input-box input[name="q"] {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--ink-primary);
+  padding: 10px 0;
+}
+
+.home-search-form .search-input-box input[name="q"]::placeholder {
+  color: var(--ink-light);
+  font-weight: 400;
 }
 
 .home-search-btn {
@@ -1287,6 +1311,7 @@ body {
   cursor: pointer;
   text-decoration: none;
   white-space: nowrap;
+  flex-shrink: 0;
   transition: background 0.18s ease, transform 0.15s ease;
 }
 
@@ -2338,5 +2363,31 @@ body {
 @media (max-width: 640px) {
   .features-grid-2 {
     grid-template-columns: 1fr;
+  }
+}
+
+/* Polish fixes from live browser QA */
+.cat-pill {
+  text-decoration: none;
+}
+
+.cp-name {
+  white-space: nowrap;
+  font-size: 0.64rem;
+}
+
+@media (max-width: 640px) {
+  .home-search-form .search-input-box {
+    padding: 4px 6px 4px 12px;
+  }
+
+  .home-search-form .search-input-box input[name="q"] {
+    font-size: 0.9rem;
+    padding: 8px 0;
+  }
+
+  .home-search-btn {
+    padding: 8px 12px;
+    font-size: 0.78rem;
   }
 }
